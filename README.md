@@ -1,2 +1,2 @@
 # JavaScript
-Repo used to save java script learging progress.
+Repo used to save java script learning progress.
