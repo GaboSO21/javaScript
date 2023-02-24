@@ -1,14 +1,31 @@
 const fs = require('fs');
 
-const crearArchivo = () => {
+const crearArchivo = (base) => {
 
-  let salida = '';
+  return new Promise((resolve, reject) => {
 
-  for (let index = 1; index <= 10; index++) {
-    salida += (index * 2 + "\n");
-  }
+    let salida = '';
 
-  fs.writeFileSync('tabla-2.txt', salida);
+    try {
+
+      for (let index = 1; index <= base; index++) {
+
+        salida += (base + "*" + index + " = " + (base * index) + '\n');
+
+      }
+
+      fs.writeFileSync(`tabla-${base}.txt`, salida);
+
+      return resolve(`tabla-${base}`);
+
+    } catch (err) {
+
+      throw err;
+
+    }
+
+  });
+
 
 }
 
