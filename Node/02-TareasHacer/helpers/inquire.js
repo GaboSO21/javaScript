@@ -65,6 +65,29 @@ export const pausa = async () => {
 
 }
 
+export const leerInput = async (message) => {
+
+  const question = [
+    {
+      type: 'input',
+      name: 'desc',
+      message,
+      validate(value) {
+        if (value.length === 0) {
+          return 'Por favor ingrese un valor';
+        }
+
+        return true;
+      }
+    }
+  ]
+
+  const { desc } = await inquirer.prompt(question);
+
+  return desc;
+
+}
+
 const tituloMenu = () => {
 
   return new Promise((resolve) => {
@@ -78,6 +101,63 @@ const tituloMenu = () => {
   });
 
 }
+
+export const listadoTareasBorrar = async (tareas = []) => {
+
+  const choices = tareas.map((tarea, idx) => {
+
+    return {
+      value: tarea.id,
+      name: `${colors.green(idx + 1)} ${tarea.desc}`
+    }
+
+  })
+
+  choices.unshift({
+    value: '0',
+    name: `${colors.green('0.')} Cancelar`
+  })
+
+  const optsBorrar = [
+    {
+      type: 'list',
+      name: 'id',
+      message: 'Borrar',
+      choices
+    }
+  ]
+
+  const { id } = await inquirer.prompt(optsBorrar);
+  return id;
+
+}
+
+export const confirmar = async (message) => {
+
+  const question = [
+    {
+      type: 'confirm',
+      name: 'Ok',
+      message
+    }
+  ]
+
+  const { ok } = await inquirer.prompt(question);
+  return ok;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
