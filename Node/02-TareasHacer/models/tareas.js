@@ -67,6 +67,26 @@ export class Tareas {
 
   }
 
+  toggleCompletadas(ids = []) {
+
+    ids.forEach(id => {
+
+      const tarea = this._listado[id];
+      if (!tarea.completadoEn) {
+        tarea.completadoEn = new Date().toISOString();
+      }
+
+    })
+
+    Object.keys(this._listado).forEach(key => {
+      const tarea = this._listado[key];
+      if (!ids.includes(tarea.id)) {
+        tarea.completadoEn = null;
+      }
+    })
+
+  }
+
 }
 
 
