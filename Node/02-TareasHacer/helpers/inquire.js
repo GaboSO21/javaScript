@@ -173,21 +173,3 @@ export const confirmar = async (message) => {
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
