@@ -33,7 +33,7 @@ const main = async () => {
                 break;
             case 3:
                 const id = await listadoPersonas(await retornarPersonas());
-                if (!id === 0) {
+                if (id !== 0) {
                     await actualizarPersona(id,
                         await leerInput('Ingrese el nuevo nombre:'),
                         await leerInput('Ingrese la nueva cedula:'),
@@ -47,7 +47,7 @@ const main = async () => {
                 break;
             case 4:
                 const _id = await listadoPersonas(await retornarPersonas());
-                if (_id === 0) {
+                if (_id !== 0) {
                     await confirmar('Esta seguro?');
                     await borrarPersona(_id)
                         .then(() => console.log('Persona borrada'))
