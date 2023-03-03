@@ -86,13 +86,13 @@ const tituloMenu = () => {
 
 }
 
-export const listadoTareasBorrar = async (tareas = []) => {
+export const listadoLugares = async (lugares = []) => {
 
-  const choices = tareas.map((tarea, idx) => {
+  const choices = lugares.map((lugar, idx) => {
 
     return {
-      value: tarea.id,
-      name: `${colors.green(idx + 1)} ${tarea.desc}`
+      value: lugar.id,
+      name: `${colors.green(idx + 1 + '.')} ${lugar.nombre}`
     }
 
   })
@@ -106,7 +106,7 @@ export const listadoTareasBorrar = async (tareas = []) => {
     {
       type: 'list',
       name: 'id',
-      message: 'Borrar',
+      message: 'Seleccione un lugar:',
       choices
     }
   ]
