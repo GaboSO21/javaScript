@@ -1,8 +1,18 @@
+import fs from 'fs';
+
 import axios from "axios";
 
 export class Busquedas {
 
   historial = [];
+  dbPath = './db/database.json';
+
+  constructor() {
+    // TODO: Leer DB si existe
+    if (this.leerDB()) {
+      this.historial = this.leerDB();
+    }
+  }
 
   get paramsMapbox() {
     return {
@@ -12,8 +22,14 @@ export class Busquedas {
     }
   }
 
-  constructor() {
-    // TODO: Leer DB si existe
+  get paramsWeather() {
+    return {
+      'appid': process.env.OPENWEATHER_KEY,
+      'lat': 0,
+      'lon': 0,
+      'units': 'metric',
+      'lang': 'es'
+    }
   }
 
   async buscarCiudad(lugar = '') {
@@ -23,7 +39,6 @@ export class Busquedas {
       const instance = axios.create({
         baseURL: `https://api.mapbox.com/geocoding/v5/mapbox.places/${lugar}.json`,
         params: this.paramsMapbox
-
       });
 
       const resp = await instance.get();
@@ -47,5 +62,78 @@ export class Busquedas {
 
   }
 
+  async buscarClima(lat = 0, lon = 0) {
+
+    try {
+
+      const instance = axios.create({
+        baseURL: 'https://api.openweathermap.org/data/2.5/weather?',
+        params: { ...this.paramsWeather, lat, lon }
+      })
+
+      const resp = await instance.get();
+
+      const { temp, temp_min, temp_max } = resp.data.main;
+      const { description } = resp.data.weather[0];
+
+      return {
+        desc: description,
+        temp_min,
+        temp_max,
+        temp
+      }
+
+    } catch (err) {
+
+      console.log(err);
+
+      return [];
+
+    }
+
+  }
+
+  agregarHistorial(lugar = '') {
+
+    if (this.historial.includes(lugar.toLowerCase())) {
+      return;
+    }
+
+    this.historial.unshift(lugar);
+
+    // Grabar en DB
+    this.guardarDB();
+  }
+
+  guardarDB() {
+
+    const payload = {
+      historial: this.historial
+    }
+
+    fs.writeFileSync(this.dbPath, JSON.stringify(payload));
+
+  }
+
+  leerDB() {
+
+    if (!fs.existsSync(this.dbPath)) {
+      return null;
+    } else {
+      const info = fs.readFileSync(this.dbPath, { encoding: 'utf-8' });
+      const data = JSON.parse(info);
+      this.historial = data.historial;
+    }
+
+  }
+
 }
+
+
+
+
+
+
+
+
 

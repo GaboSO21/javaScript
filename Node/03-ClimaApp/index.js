@@ -1,15 +1,16 @@
 import { inquireMenu, leerInput, listadoLugares, pausa } from "./helpers/inquire.js"
 import { Busquedas } from "./models/busquedas.js";
+import colors from 'colors';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
 const main = async () => {
 
   let opt = 0
+  const busquedas = new Busquedas();
 
   do {
 
-    const busquedas = new Busquedas();
     opt = await inquireMenu();
 
     switch (opt) {
@@ -18,14 +19,28 @@ const main = async () => {
         const lugar = await leerInput('Ciudad: ');
         const resultados = await busquedas.buscarCiudad(lugar);
         const id = await listadoLugares(resultados);
-        const lugarSel = resultados.find(lugar => lugar.id === id);
-        const { nombre, lat, lng } = lugarSel;
-        console.log('Ciudad:', nombre);
-        console.log('Lat:', lat);
-        console.log('Lng:', lng);
-        // Clima
-        break;
+        if (id !== '0') {
+          const lugarSel = resultados.find(lugar => lugar.id === id);
+          busquedas.agregarHistorial(lugarSel.nombre);
+          const { nombre, lat, lng } = lugarSel;
+          const { desc, temp_min, temp_max, temp } = await busquedas.buscarClima(lat, lng);
+          console.log('Ciudad:', nombre);
+          console.log('Lat:', lat);
+          console.log('Lng:', lng);
+          // Clima
+          console.log('Description:', desc);
+          console.log('Temperatura:', temp);
+          console.log('Temperatura minima:', temp_min);
+          console.log('Temperatura maxima:', temp_max);
+          break;
+        } else {
+          break;
+        }
       case 2:
+
+        busquedas.historial.forEach((lugar, i) => {
+          console.log(`${colors.green(i + 1)}. ${lugar}`);
+        })
 
         break;
     }

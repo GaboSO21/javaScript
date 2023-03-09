@@ -85,10 +85,11 @@ const tituloMenu = () => {
     return new Promise((resolve) => {
 
         console.clear();
+        const divisorTop = console.log('====================='.magenta);
         const salida = console.log('Seleccione una opcion'.red);
         const divisor = console.log('====================='.magenta);
 
-        resolve(salida, divisor);
+        resolve(divisorTop, salida, divisor);
 
     });
 
