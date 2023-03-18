@@ -108,7 +108,7 @@ export const listadoPersonas = async (listado = []) => {
 
 
     choices.unshift({
-        value: '0',
+        value: 0,
         name: `${colors.green('0.')} Cancelar`
     })
 

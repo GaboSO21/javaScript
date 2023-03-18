@@ -24,7 +24,7 @@ export const listarPersonas = async () => {
 
     const listado = await Persona.find();
     listado.forEach((persona, idx) => {
-        console.log(`${colors.green(idx + 1)}: ${persona.nombre}`);
+        console.log(`\n${colors.green(idx + 1)}: ${persona.nombre} : ${persona.primerApellido} : ${persona.segundoApellido} :: ${persona.cedula}`);
     })
 
 }

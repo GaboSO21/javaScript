@@ -48,11 +48,13 @@ const main = async () => {
             case 4:
                 const _id = await listadoPersonas(await retornarPersonas());
                 if (_id !== 0) {
-                    await confirmar('Esta seguro?');
-                    await borrarPersona(_id)
-                        .then(() => console.log('Persona borrada'))
-                        .catch(err => console.log(err));
-                    await pausa();
+                    const ok = await confirmar('Esta seguro?');
+                    if (!ok) {
+                        await borrarPersona(_id)
+                            .then(() => console.log('Persona borrada'))
+                            .catch(err => console.log(err));
+                        await pausa();
+                    }
                     break;
                 }
                 await pausa();
