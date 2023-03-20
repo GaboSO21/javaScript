@@ -7,13 +7,21 @@ const { validationResult } = require('express-validator');
 // Controladores: encargados de resolver las peticions http y retornar o 
 // asignar datos dependiendo del caso
 
-const usersGet = (req = request, res = response) => {
+const usersGet = async (req = request, res = response) => {
 
-    const query = req.query;
+    const { limite = 5, desde = 0 } = req.query;
+    const query = { estado: true };
+
+    const [usuarios, total] = await Promise.all([
+        Usuario.find(query)
+            .skip(Number(desde))
+            .limit(Number(limite)),
+        Usuario.countDocuments(query)
+    ]);
 
     res.json({
-        msg: 'Peticion get - controllador',
-        query
+        total,
+        usuarios
     });
 
 }
@@ -41,7 +49,6 @@ const usersPost = async (req = request, res = response) => {
 
     // Retornar un mensaje junto a usuario que fue salvado
     res.json({
-        msg: 'Peticion post - controllador',
         usuario
     });
 
@@ -68,7 +75,6 @@ const usersPut = async (req = request, res = response) => {
 
     // Peticion exitosa status 201
     res.status(201).json({
-        msg: 'Peticion put - controllador',
         usuario
     });
 
@@ -82,10 +88,15 @@ const usersPatch = (req, res = response) => {
 
 }
 
-const usersDelete = (req, res = response) => {
+const usersDelete = async (req, res = response) => {
+
+    const { id } = req.params;
+
+    // Fisicamente borrar
+    const usuario = await Usuario.findOneAndUpdate(id, { estado: false });
 
     res.json({
-        msg: 'Peticion delete - controllador',
+        usuario
     });
 
 }
