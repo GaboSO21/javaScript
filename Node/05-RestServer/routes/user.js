@@ -1,8 +1,13 @@
 const express = require('express');
 const { check } = require('express-validator');
+
 const { usersGet, usersPut, usersPost, usersPatch, usersDelete } = require('../controllers/user');
+
 const { esRolValido, existeEmail, existeUsuarioID } = require('../helpers/db-validators');
+
 const { validarCampos } = require('../middlewares/validar-campos');
+const { validarJWT } = require('../middlewares/validar-jwt');
+const { esAdminRole, tieneRole } = require('../middlewares/validar-roles');
 
 // Rutas: resuelven las rutas usadas para las peticiones http
 
@@ -29,10 +34,12 @@ router.post('/', [
 router.patch('/', usersPatch);
 
 router.delete('/:id', [
+    validarJWT,
+    tieneRole('ADMIN_ROLE', 'VENTAS_ROLE'),
+    // esAdminRole,
     check('id', 'No es un ID valido').isMongoId(),
     check('id').custom(existeUsuarioID),
     validarCampos
 ], usersDelete);
 
 module.exports = router;
-
