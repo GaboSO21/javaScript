@@ -1,5 +1,7 @@
 const Role = require('../models/role');
 const Usuario = require('../models/usuario');
+const Categoria = require('../models/categorias');
+const Producto = require('../models/producto');
 
 // Validaciones contra base de datos
 
@@ -42,9 +44,33 @@ const existeUsuarioID = async (id) => {
 
 };
 
+// Verificar si existe una categoria por id
+const existeCategoria = async (id) => {
+
+    const existe = await Categoria.findById(id);
+
+    if (!existe) {
+        throw new Error(`El ${id} no esta registrado en la BD`);
+    }
+
+}
+
+// Verificar si existe un producto por id
+const existeProducto = async (id) => {
+
+    const existe = await Producto.findById(id);
+
+    if (!existe) {
+        throw new Error(`El ${id} no esta registrado en la BD`);
+    }
+
+}
+
 module.exports = {
     esRolValido,
     existeEmail,
-    existeUsuarioID
+    existeUsuarioID,
+    existeCategoria,
+    existeProducto
 };
 
