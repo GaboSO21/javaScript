@@ -16,6 +16,7 @@ exports.CarsController = void 0;
 const common_1 = require("@nestjs/common");
 const cars_service_1 = require("./cars.service");
 const create_car_dto_1 = require("./dto/create-car.dto");
+const update_car_dto_1 = require("./dto/update-car.dto");
 let CarsController = class CarsController {
     constructor(carsService) {
         this.carsService = carsService;
@@ -27,19 +28,13 @@ let CarsController = class CarsController {
         return this.carsService.findOneById(id);
     }
     createCar(createCarDto) {
-        return createCarDto;
+        return this.carsService.create(createCarDto);
     }
-    updateCar(id, body) {
-        return {
-            id,
-            body
-        };
+    updateCar(id, updateCarDto) {
+        return this.carsService.update(id, updateCarDto);
     }
     deleteCar(id) {
-        return {
-            id,
-            method: 'delete'
-        };
+        return this.carsService.delete(id);
     }
 };
 exports.CarsController = CarsController;
@@ -68,7 +63,7 @@ __decorate([
     __param(0, (0, common_1.Param)('id', new common_1.ParseUUIDPipe({ version: '4' }))),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [String, update_car_dto_1.UpdateCarDto]),
     __metadata("design:returntype", void 0)
 ], CarsController.prototype, "updateCar", null);
 __decorate([

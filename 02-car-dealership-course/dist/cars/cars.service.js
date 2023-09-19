@@ -39,6 +39,37 @@ let CarsService = class CarsService {
         }
         return car;
     }
+    create(createCarDto) {
+        const newCar = {
+            id: (0, uuid_1.v4)(),
+            ...createCarDto
+        };
+        this.cars.push(newCar);
+        return newCar;
+    }
+    update(id, updateCarDto) {
+        let carDb = this.findOneById(id);
+        if (updateCarDto.id && updateCarDto.id !== id) {
+            throw new common_1.BadRequestException(`Car id is not valid in body`);
+        }
+        this.cars = this.cars.map(car => {
+            if (car.id === id) {
+                carDb = {
+                    ...carDb,
+                    ...updateCarDto,
+                    id
+                };
+                return carDb;
+            }
+            return car;
+        });
+        return carDb;
+    }
+    delete(id) {
+        const carDb = this.findOneById(id);
+        this.cars = this.cars.filter(car => car.id !== id);
+        return carDb;
+    }
 };
 exports.CarsService = CarsService;
 exports.CarsService = CarsService = __decorate([
